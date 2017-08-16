@@ -11,7 +11,7 @@
 	  <groupId>com</groupId>
   <artifactId>jcore</artifactId>
 
-	<packaging>war</packaging>
+	<packaging>jar</packaging>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>Job Maven Webapp</name>
 	<url>http://central.maven.org/maven2/</url>
