@@ -187,7 +187,7 @@ public class DbQueryMy<T> implements IQuery<T> ,IDbQuery<T>{
 	@Override
 	public T GetUnique(Object unique) {
 
-		String whereStr = String.format(" where %s=@unique ", TEntity.getUniqueKey());
+		String whereStr = String.format(" where %s=? ", TEntity.getUniqueKey());
 
 		limitForm = 0;
 		limitLength = 1;

@@ -8,7 +8,7 @@
 	</parent>
 
 	<modelVersion>4.0.0</modelVersion>
-	  <groupId>com</groupId>
+	  <groupId>com.jcore</groupId>
   <artifactId>jcore</artifactId>
 
 	<packaging>jar</packaging>
