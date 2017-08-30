@@ -20,7 +20,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.jcore.Frame.Request;
 import com.jcore.Frame.Response;
 
-@WebFilter(filterName = "RestApiFilter", urlPatterns = "/*")
+//@WebFilter(filterName = "RestApiFilter", urlPatterns = "/restapi")
 public class RestApiFilter implements Filter {
 
 	@Override
