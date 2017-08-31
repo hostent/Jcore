@@ -12,7 +12,7 @@ import org.springframework.stereotype.Component;
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
 @Component //@Component表示在spring 启动过程中，会扫描到并且注入到容器中
-public @interface ApiController {
+public @interface JcoreApiController {
 	
 	String value() default "";
 
