@@ -18,7 +18,7 @@ public class ApiBeanStore {
 
 		for (String key : beans.keySet()) {
 
-			Method[] methods = beans.get(key).getClass().getMethods();
+			Method[] methods = beans.get(key).getClass().getDeclaredMethods();
 
 			for (Method method : methods) {
 
@@ -110,4 +110,11 @@ public class ApiBeanStore {
 		this.methodKey = methodKey;
 	}
 
+
+	
+	
+	
 }
+
+
+

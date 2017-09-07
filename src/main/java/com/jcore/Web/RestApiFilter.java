@@ -34,7 +34,8 @@ public class RestApiFilter implements Filter {
 
 		System.out.println("xxxxxxxxxxxxxxx:doFilter");
 
-		Request apiReq = FillApiRequest(request);
+		String json =getJson(request);
+		Request apiReq = FillApiRequest(json);
 		Response apiResponse = new Response();
 
 		if (apiReq == null) {
@@ -52,6 +53,17 @@ public class RestApiFilter implements Filter {
 			outPutResponse(response, apiResponse);
 			return;
 		}
+		
+		//这里判断授权
+		String key = request.getParameter("key");
+		String sign = request.getParameter("sign");
+		if(!new Auth().checkAuth(key, sign, json))
+		{
+			apiResponse.setError("-101:sign签名错误");
+			outPutResponse(response, apiResponse);
+			return;
+		}
+		
 
 		apiReq.setParams(apiStore.TypeOfArgs(apiReq.getParams())); // 类型化参数
 
@@ -102,23 +114,12 @@ public class RestApiFilter implements Filter {
 		}
 		return apiStore;
 	}
+	
+	
 
-	private Request FillApiRequest(ServletRequest request) {
+	private Request FillApiRequest(String reqContent) {
 		try {
-			int totalbytes = request.getContentLength();
-			if (totalbytes <= 0) {
-				return null;
-			}
-			byte[] dataOrigin = new byte[totalbytes];
-
-			DataInputStream in = new DataInputStream(request.getInputStream());
-			in.readFully(dataOrigin);
-			in.close();
-
-			String reqContent = new String(dataOrigin);
-			if (reqContent == null || reqContent.isEmpty()) {
-				return null;
-			}
+			 
 
 			ObjectMapper objectMapper = new ObjectMapper();
 			Request req = objectMapper.readValue(reqContent, Request.class);
@@ -129,6 +130,24 @@ public class RestApiFilter implements Filter {
 		}
 		return null;
 
+	}
+
+	private String getJson(ServletRequest request) throws IOException {
+		int totalbytes = request.getContentLength();
+		if (totalbytes <= 0) {
+			return null;
+		}
+		byte[] dataOrigin = new byte[totalbytes];
+
+		DataInputStream in = new DataInputStream(request.getInputStream());
+		in.readFully(dataOrigin);
+		in.close();
+
+		String reqContent = new String(dataOrigin);
+		if (reqContent == null || reqContent.isEmpty()) {
+			return null;
+		}
+		return reqContent;
 	}
 
 	@Override
