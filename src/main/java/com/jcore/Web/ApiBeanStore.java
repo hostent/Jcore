@@ -3,6 +3,7 @@ package com.jcore.Web;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -51,6 +52,7 @@ public class ApiBeanStore {
 	public Object[] TypeOfArgs(Object[] args) {
 
 		ObjectMapper objectMapper = new ObjectMapper();
+		
 
 		Object[] par = new Object[args.length];
 
@@ -62,6 +64,7 @@ public class ApiBeanStore {
 				try {
 
 					strItem = objectMapper.writeValueAsString(object);
+					objectMapper.setDateFormat(new SimpleDateFormat("yyyy-MM-dd hh:mm:ss"));
 					par[i] = objectMapper.readValue(strItem, method.getParameterTypes()[i]);
 
 				} catch (IOException e) {

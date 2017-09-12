@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.lang.reflect.InvocationTargetException;
+import java.text.SimpleDateFormat;
 
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
@@ -123,6 +124,9 @@ public class RestApiFilter implements Filter {
 			 
 
 			ObjectMapper objectMapper = new ObjectMapper();
+			objectMapper.setDateFormat(new SimpleDateFormat("yyyy-MM-dd hh:mm:ss"));
+			
+			//@JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
 			Request req = objectMapper.readValue(reqContent, Request.class);
 			return req;
 
