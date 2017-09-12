@@ -2,6 +2,7 @@ package com.jcore.Web;
 
 import java.io.DataInputStream;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.lang.reflect.InvocationTargetException;
 
@@ -137,10 +138,13 @@ public class RestApiFilter implements Filter {
 		if (totalbytes <= 0) {
 			return null;
 		}
-		byte[] dataOrigin = new byte[totalbytes];
+		char[] dataOrigin = new char[totalbytes];
 
 		DataInputStream in = new DataInputStream(request.getInputStream());
-		in.readFully(dataOrigin);
+		
+		InputStreamReader sr = new InputStreamReader(in, "utf-8"); 
+		 
+		sr.read(dataOrigin);
 		in.close();
 
 		String reqContent = new String(dataOrigin);
