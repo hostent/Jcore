@@ -16,6 +16,7 @@ public class Auth {
 		try {
 			this.setSecret(PropertiesHelp.getAppConf("api.secret." + key));
 		} catch (IOException e) {
+			this.setSecret(null);
 			e.printStackTrace();
 		}
 	}
@@ -59,16 +60,18 @@ public class Auth {
 		return md5str.toString().toUpperCase();
 	}
 
-	public boolean checkAuth(String sign,String json)
-	{
-		
-		String calcSign =getMD5( key + secret + json);
-		//url: restapi?key=hfht&token=xxxxxxxxxxxxx
-		if(calcSign.toLowerCase()!=sign.toLowerCase())
-		{
+	public boolean checkAuth(String sign, String json) {
+		if (secret == null || secret.isEmpty()) {
+			//没有配置，就是不校验
+			return true;
+		}
+
+		String calcSign = getMD5(key + secret + json);
+		// url: restapi?key=hfht&token=xxxxxxxxxxxxx
+		if (calcSign.toLowerCase() != sign.toLowerCase()) {
 			return false;
 		}
-		
+
 		return true;
 	}
 
