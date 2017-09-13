@@ -21,54 +21,43 @@ public class Auth {
 		}
 	}
 
-	static String getMD5(String message) {
-		String md5str = "";
+ 
+ 
+	String toMD5(String plainText) {
 		try {
-			// 1 创建一个提供信息摘要算法的对象，初始化为md5算法对象
+			// 生成实现指定摘要算法的 MessageDigest 对象。
 			MessageDigest md = MessageDigest.getInstance("MD5");
-
-			// 2 将消息变成byte数组
-			byte[] input = message.getBytes("utf-8");
-
-			// 3 计算后获得字节数组,这就是那128位了
-			byte[] buff = md.digest(input);
-
-			// 4 把数组每一字节（一个字节占八位）换成16进制连成md5字符串
-			md5str = bytesToHex(buff);
-
+			// 使用指定的字节数组更新摘要。
+			md.update(plainText.getBytes("utf-8"));
+			// 通过执行诸如填充之类的最终操作完成哈希计算。
+			byte b[] = md.digest();
+			// 生成具体的md5密码到buf数组
+			int i;
+			StringBuffer buf = new StringBuffer("");
+			for (int offset = 0; offset < b.length; offset++) {
+				i = b[offset];
+				if (i < 0)
+					i += 256;
+				if (i < 16)
+					buf.append("0");
+				buf.append(Integer.toHexString(i));
+			}
+			return buf.toString();
 		} catch (Exception e) {
 			e.printStackTrace();
+			return "";
 		}
-		return md5str;
-	}
-
-	static String bytesToHex(byte[] bytes) {
-		StringBuffer md5str = new StringBuffer();
-		// 把数组每一字节换成16进制连成md5字符串
-		int digital;
-		for (int i = 0; i < bytes.length; i++) {
-			digital = bytes[i];
-
-			if (digital < 0) {
-				digital += 256;
-			}
-			if (digital < 16) {
-				md5str.append("0");
-			}
-			md5str.append(Integer.toHexString(digital));
-		}
-		return md5str.toString().toUpperCase();
 	}
 
 	public boolean checkAuth(String sign, String json) {
 		if (secret == null || secret.isEmpty()) {
-			//没有配置，就是不校验
+			// 没有配置，就是不校验
 			return true;
 		}
 
-		String calcSign = getMD5(key + secret + json);
-		// url: restapi?key=hfht&token=xxxxxxxxxxxxx
-		if (calcSign.toLowerCase() != sign.toLowerCase()) {
+		String calcSign = toMD5(key + secret + json.trim());
+
+		if (!calcSign.toLowerCase().equals(sign.toLowerCase())) {
 			return false;
 		}
 
