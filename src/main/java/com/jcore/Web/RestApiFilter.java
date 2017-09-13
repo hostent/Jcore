@@ -59,7 +59,7 @@ public class RestApiFilter implements Filter {
 		//这里判断授权
 		String key = request.getParameter("key");
 		String sign = request.getParameter("sign");
-		if(!new Auth().checkAuth(key, sign, json))
+		if(!new Auth(key).checkAuth(sign, json))
 		{
 			apiResponse.setError("-101:sign签名错误");
 			outPutResponse(response, apiResponse);
