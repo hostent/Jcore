@@ -36,7 +36,7 @@ public class RestApiFilter implements Filter {
 
 		System.out.println("xxxxxxxxxxxxxxx:doFilter");
 
-		String json =getJson(request);
+		String json = getJson(request);
 		Request apiReq = FillApiRequest(json);
 		Response apiResponse = new Response();
 
@@ -55,19 +55,28 @@ public class RestApiFilter implements Filter {
 			outPutResponse(response, apiResponse);
 			return;
 		}
-		
-		//这里判断授权
+
+		// 这里判断授权
 		String key = request.getParameter("key");
 		String sign = request.getParameter("sign");
-		if(!new Auth(key).checkAuth(sign, json))
-		{
+		if (!new Auth(key).checkAuth(sign, json)) {
 			apiResponse.setError("-101:sign签名错误");
 			outPutResponse(response, apiResponse);
 			return;
 		}
-		
 
 		apiReq.setParams(apiStore.TypeOfArgs(apiReq.getParams())); // 类型化参数
+
+		// usercheck
+		if (apiStore.getBeanInstance() instanceof IAuth) {
+			IAuth authBean = (IAuth) apiStore.getBeanInstance();
+			boolean checkResult = authBean.userCheck(key, apiStore.getMethod().getName(), apiReq.getParams());
+			if (!checkResult) {
+				apiResponse.setError("-102:method is forbid，Params and key is not match");
+				outPutResponse(response, apiResponse);
+				return;
+			}
+		}
 
 		try {
 
@@ -116,17 +125,14 @@ public class RestApiFilter implements Filter {
 		}
 		return apiStore;
 	}
-	
-	
 
 	private Request FillApiRequest(String reqContent) {
 		try {
-			 
 
 			ObjectMapper objectMapper = new ObjectMapper();
 			objectMapper.setDateFormat(new SimpleDateFormat("yyyy-MM-dd hh:mm:ss"));
-			
-			//@JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
+
+			// @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
 			Request req = objectMapper.readValue(reqContent, Request.class);
 			return req;
 
@@ -145,9 +151,9 @@ public class RestApiFilter implements Filter {
 		char[] dataOrigin = new char[totalbytes];
 
 		DataInputStream in = new DataInputStream(request.getInputStream());
-		
-		InputStreamReader sr = new InputStreamReader(in, "utf-8"); 
-		 
+
+		InputStreamReader sr = new InputStreamReader(in, "utf-8");
+
 		sr.read(dataOrigin);
 		in.close();
 
