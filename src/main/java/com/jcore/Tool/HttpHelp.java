@@ -139,7 +139,7 @@ public class HttpHelp {
 
 		post.setURI(new URI(url));
 		
-		StringEntity se = new StringEntity(json);
+		StringEntity se = new StringEntity(json,"utf-8");
 		
 		post.setEntity(se);
 		 

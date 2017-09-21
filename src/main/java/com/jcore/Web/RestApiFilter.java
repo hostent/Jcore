@@ -138,6 +138,7 @@ public class RestApiFilter implements Filter {
 
 		} catch (Exception e) {
 			// TODO: handle exception
+			System.out.println(e);
 		}
 		return null;
 
