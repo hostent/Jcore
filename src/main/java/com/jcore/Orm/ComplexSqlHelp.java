@@ -73,18 +73,18 @@ public class ComplexSqlHelp<T> {
 					&& (conditionDict.get(item.Property).toString()).isEmpty())) {
 				continue;
 			}
-			if (item.Type.trim() == "") {
+			if (item.Type.trim().isEmpty()) {
 				if (sb.length() != 0) {
 					sb.append(item.Prepend);
 				}
-				if (item.Prepend.trim() == ",") {
+				if (item.Prepend.trim().equals(",")) {
 					isSet = true;
 					sb.append(item.Data);
 				} else {
 					sb.append(" ( ").append(item.Data).append(" ) ");
 				}
 				tag.put(item.Property, conditionDict.get(item.Property));
-			} else if (item.Type.trim().toLowerCase() == "in") {
+			} else if (item.Type.trim().toLowerCase().equals("in") ) {
 				String value = conditionDict.get(item.Property).toString();
 				if (value.startsWith(",")) {
 					value = value.substring(1, value.length() - 1);
@@ -93,30 +93,30 @@ public class ComplexSqlHelp<T> {
 					value = value.substring(0, value.length() - 2);
 				}
 
-				if (value == null || value == "") {
+				if (value == null || value.isEmpty()) {
 					continue;
 				}
 				String str = " (";
 				for (int i = 0; i < value.split(",").length; i++) {
 					String keyStr = item.Property + "__" + i;
-					str = str + "@" + keyStr + ",";
+					str = str + "?,";
 					tag.put(keyStr, value.split(",")[i]);
 				}
 				if (str.endsWith(",")) {
-					str = str.substring(0, str.length() - 2);
+					str = str.substring(0, str.length() - 1);
 				}
 				str = str + ") ";
 				if (sb.length() != 0) {
 					sb.append(item.Prepend);
 				}
 				sb.append(" ( ").append(item.Data.replace("@" + item.Property, str)).append(" ) ");
-			} else if (item.Type.trim().toLowerCase() == "like") {
+			} else if (item.Type.trim().toLowerCase().equals("like")) {
 				if (sb.length() != 0) {
 					sb.append(item.Prepend);
 				}
 				sb.append(" ( ").append(item.Data).append(" ) ");
 				tag.put(item.Property, "%" + conditionDict.get(item.Property) + "%");
-			} else if (item.Type.trim().toLowerCase() == "leftlike") {
+			} else if (item.Type.trim().toLowerCase().equals("leftlike")) {
 				if (sb.length() != 0) {
 					sb.append(item.Prepend);
 				}
@@ -221,7 +221,19 @@ public class ComplexSqlHelp<T> {
 				while (keys.hasMoreElements()) {
 					String key = keys.nextElement();
 					if (!data.containsKey(key.toLowerCase())) {
-						data.put(key, where.get(key));
+						Object obj =where.get(key);
+						int i=0;
+						if(obj  instanceof java.util.List)
+						{
+							for (Object objItem : (List)obj) {
+								data.put(key+"_"+i, objItem);
+							}
+						}
+						else
+						{
+							data.put(key, obj);
+						}
+						
 					}
 				}
 

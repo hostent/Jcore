@@ -72,7 +72,7 @@ public class RecordMap {
 		T t = null;
 		try {
 			rsmd = rs.getMetaData();
-			Method[] methods = clazz.getDeclaredMethods();
+			Method[] methods = clazz.getMethods();
 			while (rs.next()) {
 				t = (T) clazz.newInstance();
 				for (int i = 1; i <= rsmd.getColumnCount(); i++) {

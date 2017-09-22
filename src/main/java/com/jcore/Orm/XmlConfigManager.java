@@ -4,6 +4,8 @@ import org.dom4j.*;
 import org.dom4j.io.SAXReader;
 
 import java.io.*;
+import java.net.URLDecoder;
+ 
 
 public class XmlConfigManager {
 
@@ -17,7 +19,16 @@ public class XmlConfigManager {
 		String rootXml = "<Reps></Reps>";
 
 		try {
-			String repsPath = XmlConfigManager.class.getClassLoader().getResource("").getFile() + "jcore.module.xml";
+			String repsPath = XmlConfigManager.class.getClassLoader().getResource("").getFile() + "XmlReport";
+			
+			try {
+				repsPath = URLDecoder.decode(repsPath,"utf-8");
+				
+			} catch (UnsupportedEncodingException e) {
+				 
+				e.printStackTrace();
+			}
+			
 			File file = new File(repsPath);
 			if (file.isDirectory()) {
 				File[] fileArray = file.listFiles();
