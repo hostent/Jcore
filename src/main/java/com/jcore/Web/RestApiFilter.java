@@ -35,10 +35,17 @@ public class RestApiFilter implements Filter {
 			throws IOException, ServletException {
 
 		System.out.println("xxxxxxxxxxxxxxx:doFilter");
-
-		String json = getJson(request);
-		Request apiReq = FillApiRequest(json);
 		Response apiResponse = new Response();
+		
+		String json = getJson(request);
+		if(json==null || json.isEmpty())
+		{
+			apiResponse.setError("-90:传输数据错误,Json空");
+			outPutResponse(response, apiResponse);
+			return;
+		}
+		Request apiReq = FillApiRequest(json);
+		
 
 		if (apiReq == null) {
 			apiResponse.setError("-90:传输数据错误");
