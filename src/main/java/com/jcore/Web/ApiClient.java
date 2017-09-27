@@ -24,6 +24,13 @@ public class ApiClient {
 		_key = key;
 		_secret = secret;
 	}
+	
+	public ApiClient(ApiClientConfig config)
+	{
+		_url = config.get_url();
+		_key = config.get_key();
+		_secret = config.get_secret();
+	}
 
 	private String getUrl(String json) {
 		_url = _url + "?key={key}&sign={sign}";
