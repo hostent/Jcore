@@ -227,6 +227,7 @@ public class ComplexSqlHelp<T> {
 						{
 							for (Object objItem : (List)obj) {
 								data.put(key+"_"+i, objItem);
+								i++;
 							}
 						}
 						else

@@ -66,7 +66,7 @@ public class ApiClient {
 		String str = response.body().string();
 
 		Response resp = objectMapper.readValue(str, Response.class);
-		if (resp.getError() != null || (!resp.getError().isEmpty())) {
+		if (resp.getError() != null && (!resp.getError().isEmpty())) {
 			// log error
 			return null;
 		}
