@@ -28,8 +28,8 @@ public class NettyClientTest {
 			Channel ch = b.bind(0).sync().channel();
 
 			// Broadcast the QOTM request to port 8080.
-			ch.writeAndFlush(new DatagramPacket(Unpooled.copiedBuffer("QOTM?", CharsetUtil.UTF_8),
-					SocketUtils.socketAddress("255.255.255.255", PORT))).sync();
+			//ch.writeAndFlush(new DatagramPacket(Unpooled.copiedBuffer("QOTM?", CharsetUtil.UTF_8),
+					//SocketUtils.socketAddress("255.255.255.255", PORT))).sync();
 
 			// QuoteOfTheMomentClientHandler will close the DatagramChannel when
 			// a
