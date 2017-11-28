@@ -49,5 +49,9 @@ public class Log {
 	{
 		errorLog.error(getErrorMsg(e));
 	}
+	public final static void logError(Exception e,String msg)
+	{
+		errorLog.error(getErrorMsg(e)+msg);
+	}
 
 }

@@ -135,7 +135,7 @@ public class DbQueryMy<T> implements IQuery<T> ,IDbQuery<T>{
 		
 		Connection conn = ConnetionManager.getConn(ConnKey);
 		
-		int count = (int) MsSqlHelp.ExecScalar(conn, this.trackSql, sqlArgs.toArray());
+		int count = Integer.parseInt( MsSqlHelp.ExecScalar(conn, this.trackSql, sqlArgs.toArray()).toString());
 		
 		ConnetionManager.close(conn);
 		return count;
