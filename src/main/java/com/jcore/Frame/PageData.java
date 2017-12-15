@@ -7,9 +7,8 @@ public class PageData<T> {
 	public int total;
     public List<T> rows;
     
-    public int current;
-     
-    public int rowCount;
+
+    
 
     public PageData()
     {

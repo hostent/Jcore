@@ -110,8 +110,6 @@ public abstract class DbSet<T> implements ISet<T> ,IDbQuery<T>{
          int totalCount = 0;
          result.rows =new ComplexSqlHelp<T>(Conn,getType()).GetReportData(  reportName, param.PageSize, param.PageIndex, param.Order, param.Pars, true, totalCount);
          result.total = totalCount;
-         result.current = param.PageIndex;
-         result.rowCount = param.PageSize;
          
 		return result;
 		

@@ -13,6 +13,10 @@ public class PropertiesHelp {
 	static Properties appPro = null;
 
 	private static Object flagLock2="2";
+	
+	static Properties applicationPro = null;
+	
+	private static Object flagLock3="3";
 
 	public static String getDbConf(String key) throws IOException {
 		if (dbPro == null) {
@@ -34,9 +38,7 @@ public class PropertiesHelp {
 
 	}
 
-	
-	
-	
+
 	public static String getAppConf(String key) throws IOException {
 		if (appPro == null) {
 			synchronized (flagLock2) {
@@ -52,6 +54,25 @@ public class PropertiesHelp {
 		}
 
 		return appPro.getProperty(key, "");
+
+	}
+
+	
+	public static String getApplicationConf(String key) throws IOException {
+		if (applicationPro == null) {
+			synchronized (flagLock3) {
+				if(applicationPro == null)
+				{	
+					applicationPro = new Properties();					
+					
+					applicationPro.load(PropertiesHelp.class.getClassLoader().getResourceAsStream("application.properties"));
+					
+					flagLock3=3;
+				}				
+			}
+		}
+
+		return applicationPro.getProperty(key, "");
 
 	}
 

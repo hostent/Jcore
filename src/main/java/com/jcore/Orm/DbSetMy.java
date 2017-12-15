@@ -143,8 +143,6 @@ public abstract class DbSetMy<T> implements ISet<T>,IDbQuery<T> {
 		result.rows = new ComplexSqlHelp<T>(conn, getType()).GetReportData(reportName, param.PageSize, param.PageIndex,
 				param.Order, param.Pars, true, totalCount);
 		result.total = totalCount;
-		result.current = param.PageIndex;
-		result.rowCount = param.PageSize;
 
 		ConnetionManager.close(conn);
 		return result;

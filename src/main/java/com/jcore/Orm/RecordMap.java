@@ -100,19 +100,19 @@ public class RecordMap {
 				rs.close();
 			}
 		} catch (SQLException e) {
-			Log.logError(e);
+			Log.logError(e,"字段："+temp);
 		} catch (IllegalArgumentException e) {
-			Log.logError(e);
+			Log.logError(e,"字段："+temp);
 		} catch (IllegalAccessException e) {
-			Log.logError(e);
+			Log.logError(e,"字段："+temp);
 		} catch (InvocationTargetException e) {
-			Log.logError(e);
+			Log.logError(e,"字段："+temp);
 		} catch (SecurityException e) {
-			Log.logError(e);
+			Log.logError(e,"字段："+temp);
 		} catch (InstantiationException e) {
-			Log.logError(e);
+			Log.logError(e,"字段："+temp);
 		} catch (NoSuchMethodException e) {
-			Log.logError(e);
+			Log.logError(e,"字段："+temp);
 		}
 		return list;
 	}
