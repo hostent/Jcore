@@ -1,10 +1,17 @@
 package com.jcore.Orm;
 
 import java.lang.reflect.*;
+import java.math.BigDecimal;
 import java.sql.*;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
 import java.util.*;
+import java.util.Date;
 
+import com.fasterxml.jackson.datatype.jsr310.deser.key.LocalDateTimeKeyDeserializer;
 import com.jcore.Frame.Log;
+import com.jcore.Tool.DataConverter;
 
 
 
@@ -37,7 +44,11 @@ public class RecordMap {
 					{
 						throw new NoSuchMethodException();
 					}
-					method.invoke(t, rs.getObject(temp));
+					
+					Type paramType = method.getGenericParameterTypes()[0];
+					Object dataTag =DataConverter.parse(paramType, rs.getObject(temp));
+					
+					method.invoke(t, dataTag);
 				}
 			}
 			if(!rs.isClosed())
@@ -62,6 +73,7 @@ public class RecordMap {
 		return t;
 	}
 	
+
 	@SuppressWarnings("unchecked")
 	public static <T> List<T> toList(Class<?> clazz, ResultSet rs)
 	{
@@ -90,7 +102,12 @@ public class RecordMap {
 					{
 						throw new NoSuchMethodException();
 					}
-					method.invoke(t, rs.getObject(temp));
+					Type paramType = method.getGenericParameterTypes()[0];	
+					
+					Object dataTag =DataConverter.parse(paramType, rs.getObject(temp));
+					
+					method.invoke(t, dataTag);
+					
 				}
 				
 				list.add(t);
