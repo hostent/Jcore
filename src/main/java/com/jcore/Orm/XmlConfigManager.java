@@ -40,9 +40,11 @@ public class XmlConfigManager {
 
 						doc = reader.read(fileArray[i]);
 
-						Element repItem = doc.getRootElement().element("Rep");
+						//Element repItem = .elements("Rep");
+						
+						String xml =doc.getRootElement().asXML().replace("<Reps>", "").replace("</Reps>", "");
 
-						rootXml = rootXml.replace("</Reps>", repItem.asXML() + "</Reps>");
+						rootXml = rootXml.replace("</Reps>", xml + "</Reps>");
 
 					}
 				}

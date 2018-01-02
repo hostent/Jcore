@@ -4,7 +4,7 @@ import java.util.*;
 
 public class PageData<T> {
 	
-	public int total;
+	public long total;
     public List<T> rows;
     
 
@@ -14,7 +14,7 @@ public class PageData<T> {
     {
     }
 
-    public PageData(int count, List<T> page)
+    public PageData(long count, List<T> page)
     {
         total = count;
         rows = page;

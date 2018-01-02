@@ -14,12 +14,15 @@ import java.sql.SQLException;
 
 public class ComplexSqlHelp<T> {
 
-	public ComplexSqlHelp(Connection conn,Class<?> type) {
+	public ComplexSqlHelp(Connection conn,Class<?> type,String dbType) {
 		Conn = conn;
 		TEntity = new Entity<T>(type);
+		_dbType=dbType;
 	}
 
 	Entity<T> TEntity;
+	
+	private String _dbType="";
 
 	private Connection Conn;
 
@@ -136,7 +139,7 @@ public class ComplexSqlHelp<T> {
  
 
 	public List<T> GetReportData(String reportName, int pageSize, int pageIndex, String order,
-			Hashtable<String, Object> where, boolean isPage, int totalCount) {
+			Hashtable<String, Object> where, boolean isPage, long totalCount) {
 
 		try {
 			Element root = XmlConfigManager.getRepsConfig();
@@ -209,7 +212,15 @@ public class ComplexSqlHelp<T> {
 
 				int start = (pageIndex - 1) * pageSize;
 
-				reportsql = reportsql + "  order by {0} OFFSET {1} ROWS FETCH NEXT {2} ROWS ONLY";
+				if(_dbType.equals("mysql"))
+				{
+					reportsql = reportsql + " order by %s limit %s,%s ";
+				}
+				else
+				{
+					reportsql = reportsql + "  order by %s OFFSET %s ROWS FETCH NEXT %s ROWS ONLY";
+				}
+				
 
 				reportsql = String.format(reportsql, order, start, pageSize);
 			}
@@ -248,7 +259,7 @@ public class ComplexSqlHelp<T> {
 
 			if (isPage) {
 				HashMap<String,Object> mapPage = sort(countSql,data);
-				totalCount = (int) MsSqlHelp.ExecScalar(Conn, (String)mapPage.get("sql"), (Object[])mapPage.get("data"));
+				totalCount = (long) MsSqlHelp.ExecScalar(Conn, (String)mapPage.get("sql"), (Object[])mapPage.get("data"));
 			} else {
 				totalCount = 0;
 			}
