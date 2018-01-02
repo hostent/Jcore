@@ -7,6 +7,7 @@ import java.util.function.BiConsumer;
 import org.dom4j.Element;
 
 import com.jcore.Frame.Log;
+import com.jcore.Frame.PageData;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -136,10 +137,16 @@ public class ComplexSqlHelp<T> {
 
 	}
 
- 
+	public List<T> GetReportData(String reportName, Hashtable<String, Object> where)
+	{
+		PageData<T> page = GetReportData(reportName,0,0,"",where,false);
+		
+		return page.rows;
+		
+	}
 
-	public List<T> GetReportData(String reportName, int pageSize, int pageIndex, String order,
-			Hashtable<String, Object> where, boolean isPage, long totalCount) {
+ 	public PageData<T>  GetReportData(String reportName, int pageSize, int pageIndex, String order,
+			Hashtable<String, Object> where, boolean isPage) {
 
 		try {
 			Element root = XmlConfigManager.getRepsConfig();
@@ -256,18 +263,23 @@ public class ComplexSqlHelp<T> {
 			ResultSet rs = MsSqlHelp.getResultSet(Conn, (String)map.get("sql"), (Object[])map.get("data"));
 
 			List<T> list = RecordMap.toList(TEntity.getType(), rs);
+			
+			Long totalCount =0l;
 
 			if (isPage) {
 				HashMap<String,Object> mapPage = sort(countSql,data);
-				totalCount = (long) MsSqlHelp.ExecScalar(Conn, (String)mapPage.get("sql"), (Object[])mapPage.get("data"));
+				totalCount =   (Long)MsSqlHelp.ExecScalar(Conn, (String)mapPage.get("sql"), (Object[])mapPage.get("data"));
 			} else {
-				totalCount = 0;
+				totalCount =  new Long(0l);
 			}
+			
+			PageData<T> result = new PageData<T>();
+			result.rows=list;
+			result.total=totalCount;
 
-			return list;
+			return result;
 		} catch (Exception e) {
-			totalCount = 0;
-
+			 
 			return null;
 		} finally {
 			try {
@@ -282,6 +294,8 @@ public class ComplexSqlHelp<T> {
 
 	}
 
+	
+ 
 	
 
 	public HashMap<String,Object> sort(String sql, Hashtable<String, Object> par) {

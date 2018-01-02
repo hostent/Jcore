@@ -99,19 +99,16 @@ public abstract class DbSet<T> implements ISet<T> ,IDbQuery<T>{
 	@Override
 	public List<T> QueryXml(String reportName, Hashtable<String, Object> par) {
 
-		return	new ComplexSqlHelp<T>(Conn,getType(),"sql").GetReportData(reportName, 0, 0, "", par, false, 0);
+		return	new ComplexSqlHelp<T>(Conn,getType(),"sql").GetReportData(reportName, par);
 		 
 	}
 
 	@Override
 	public PageData<T> QueryXml(String reportName, PagePars param) {
 		 
-		 PageData<T> result = new PageData<T>();
-         int totalCount = 0;
-         result.rows =new ComplexSqlHelp<T>(Conn,getType(),"sql").GetReportData(  reportName, param.PageSize, param.PageIndex, param.Order, param.Pars, true, totalCount);
-         result.total = totalCount;
-         
-		return result;
+		 
+         return new ComplexSqlHelp<T>(Conn,getType(),"sql").GetReportData(  reportName, param.PageSize, param.PageIndex, param.Order, param.Pars, true);
+          
 		
 	}
 

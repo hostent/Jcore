@@ -125,7 +125,7 @@ public abstract class DbSetMy<T> implements ISet<T>,IDbQuery<T> {
 
 		Connection conn = ConnetionManager.getConn(ConnKey);
 
-		List<T> list = new ComplexSqlHelp<T>(conn, getType(),"mysql").GetReportData(reportName, 0, 0, "", par, false, 0);
+		List<T> list = new ComplexSqlHelp<T>(conn, getType(),"mysql").GetReportData(reportName, par);
 
 		ConnetionManager.close(conn);
 
@@ -135,14 +135,13 @@ public abstract class DbSetMy<T> implements ISet<T>,IDbQuery<T> {
 	@Override
 	public PageData<T> QueryXml(String reportName, PagePars param) {
 
-		PageData<T> result = new PageData<T>();
-		int totalCount = 0;
+ 
 
 		Connection conn = ConnetionManager.getConn(ConnKey);
 
-		result.rows = new ComplexSqlHelp<T>(conn, getType(),"mysql").GetReportData(reportName, param.PageSize, param.PageIndex,
-				param.Order, param.Pars, true, totalCount);
-		result.total = totalCount;
+		PageData<T> result = new ComplexSqlHelp<T>(conn, getType(),"mysql").GetReportData(reportName, param.PageSize, param.PageIndex,
+				param.Order, param.Pars, true);
+ 
 
 		ConnetionManager.close(conn);
 		return result;
