@@ -53,7 +53,7 @@ public class ComplexSqlHelp<T> {
 			Hashtable<String, Object> tag) {
 		StringBuilder sb = new StringBuilder();
 
-		//tag = new Hashtable<String, Object>();
+		tag = new Hashtable<String, Object>();
 		Hashtable<String, Object> conditionDict = new Hashtable<String, Object>();
 
 		Enumeration<String> keys =condition.keys();
