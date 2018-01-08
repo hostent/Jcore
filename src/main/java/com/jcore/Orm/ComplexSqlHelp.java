@@ -198,14 +198,22 @@ public class ComplexSqlHelp<T> {
 						countSql = countSql.replace(dyProperty, dynamicStr);
 					}
 					if (data != null) {
-						while (dataRes.keys().hasMoreElements()) {
-							String key = dataRes.keys().nextElement();
-
-							if (data.containsKey(key)) {
+						for(Iterator<Entry<String,Object>> iterator=dataRes.entrySet().iterator();iterator.hasNext();){
+							Entry<String,Object> entry=iterator.next();
+							if(data.containsKey(entry.getKey())){
 								continue;
 							}
-							data.put(key, dataRes.get(key));
+							data.put(entry.getKey(), entry.getValue());
 						}
+						
+//						while (dataRes.keys().hasMoreElements()) {
+//							String key = dataRes.keys().nextElement();
+//
+//							if (data.containsKey(key)) {
+//								continue;
+//							}
+//							data.put(key, dataRes.get(key));
+//						}
 					}
 			       
 			} 	
