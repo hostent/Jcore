@@ -42,7 +42,8 @@ public class RecordMap {
 					}	
 					if(method==null)
 					{
-						throw new NoSuchMethodException();
+						continue;
+						//throw new NoSuchMethodException();
 					}
 					
 					Type paramType = method.getGenericParameterTypes()[0];
@@ -65,8 +66,8 @@ public class RecordMap {
 			Log.logError(e,"字段："+temp);
 		} catch (SecurityException e) {
 			Log.logError(e,"字段："+temp);
-		} catch (NoSuchMethodException e) {
-			Log.logError(e,"字段："+temp);
+//		} catch (NoSuchMethodException e) {
+//			Log.logError(e,"字段："+temp);
 		} catch (InstantiationException e) {
 			Log.logError(e,"字段："+temp);
 		}
@@ -100,7 +101,8 @@ public class RecordMap {
 					}	
 					if(method==null)
 					{
-						throw new NoSuchMethodException();
+						continue;
+						//throw new NoSuchMethodException();
 					}
 					Type paramType = method.getGenericParameterTypes()[0];	
 					
@@ -128,8 +130,8 @@ public class RecordMap {
 			Log.logError(e,"字段："+temp);
 		} catch (InstantiationException e) {
 			Log.logError(e,"字段："+temp);
-		} catch (NoSuchMethodException e) {
-			Log.logError(e,"字段："+temp);
+//		} catch (NoSuchMethodException e) {
+//			Log.logError(e,"字段："+temp);
 		}
 		return list;
 	}

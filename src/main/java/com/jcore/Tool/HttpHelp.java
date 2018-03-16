@@ -12,7 +12,9 @@ import okhttp3.*;
 
 public class HttpHelp {
 
-	public static final MediaType JSON_Form = MediaType.parse("application/x-www-form-urlencoded;charset=utf-8");
+	public static final MediaType Form = MediaType.parse("application/x-www-form-urlencoded;charset=utf-8");
+	
+	public static final MediaType JSON = MediaType.parse("application/json;charset=utf-8");
 
 	public static String post(String url, HashMap<String, Object> head, HashMap<String, Object> body) throws JFrameException {
 
@@ -26,6 +28,8 @@ public class HttpHelp {
 		RequestBody requestBody = build.build();
 
 		Request.Builder reqBuild = new Request.Builder();
+		
+		reqBuild.addHeader("content-type", "application/x-www-form-urlencoded;charset:utf-8");
 
 		if (head != null && (!head.isEmpty())) {
 			for (Entry<String, Object> entry : head.entrySet()) {
@@ -54,5 +58,32 @@ public class HttpHelp {
 		
 
 	}
+	
+	public static String postJson(String url,String json) {
+	    
+	    OkHttpClient okHttpClient = new OkHttpClient();
+	    
+	    RequestBody requestBody = RequestBody.create(JSON, json);
+	    
+	    Request request = new Request.Builder()
+	            .url(url)
+	            .post(requestBody)
+	            .build();
+	    
+	    request.newBuilder().addHeader("content-type", "application/json;charset=utf-8");
+	     
+	    try {
+	    Response response=okHttpClient.newCall(request).execute();
+	    
+	    return response.body().string();
+	       
+	        
+	    } catch (IOException e) {
+	        e.printStackTrace();
+	        return "";
+	    }
+
+	}
+ 
 
 }

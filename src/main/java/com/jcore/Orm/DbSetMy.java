@@ -24,6 +24,13 @@ public abstract class DbSetMy<T> implements ISet<T>,IDbQuery<T> {
 
 		Prefix = prefix;
 	}
+	
+	//for xml
+	public DbSetMy(String connKey,Class<T> type) {
+		ConnKey = connKey;
+		TEntity = new Entity<T>(type);
+	}
+
 
 	public abstract Class<?> getType();
 
@@ -131,6 +138,21 @@ public abstract class DbSetMy<T> implements ISet<T>,IDbQuery<T> {
 
 		return list;
 	}
+	
+	
+	public String reportName="";
+	
+	@Override
+	public List<T> QueryXml( Hashtable<String, Object> par)
+	{
+		return QueryXml(reportName,par);
+	}
+	
+	@Override
+	public PageData<T> QueryXml( PagePars param) {
+		return QueryXml(reportName,param);
+	}
+	
 
 	@Override
 	public PageData<T> QueryXml(String reportName, PagePars param) {
