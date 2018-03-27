@@ -44,7 +44,7 @@ public abstract class DbSetMy<T> implements ISet<T>,IDbQuery<T> {
 	@Override
 	public Object Add(T t) {
 
-		String sql = "insert into {table} ( {columns} ) values ( {values} );"; // select
+		String sql = "insert into `{table}` ( {columns} ) values ( {values} );"; // select
 																				// @@IDENTITY;
 		String[] columns;
 

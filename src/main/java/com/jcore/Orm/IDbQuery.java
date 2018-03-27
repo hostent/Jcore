@@ -23,5 +23,9 @@ public interface IDbQuery<T> {
 
     boolean Exist();
     
+//    <E> E  FirstSelect(Class<E> cla);
+//    
+//    <E> List<E> ToListSelect(Class<E> cla);
+//    
     
 }

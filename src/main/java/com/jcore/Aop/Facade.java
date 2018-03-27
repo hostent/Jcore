@@ -47,7 +47,9 @@ public class Facade implements InvocationHandler {
         	
         	ApiClient client =	new ApiClient(new ApiClientConfig(apiCall.service()));
         	
-        	return client.post(method.getReturnType(), apiCall.method(), args);    
+        	
+        	
+        	return client.post(method.getGenericReturnType(), apiCall.method(), args);    
     	}
     	
     	return null;
@@ -70,9 +72,22 @@ public class Facade implements InvocationHandler {
         try {
         	
         	Object tag=null;
-        	Class<?> cla = Class.forName(getImpName(mapperInterface.getName())); // todo
         	
-        	//expressListService.service.Imp.HellImp
+        	String impName = getImpName(mapperInterface.getName());
+        	
+        	Class<?> cla=null;
+        	
+        	try
+        	{
+        		cla= Class.forName(impName);  
+        		
+        	}catch (Exception e) {
+        		cla=null;
+			}
+        	
+        	
+        	
+
         	
         	if(cla==null)
         	{
