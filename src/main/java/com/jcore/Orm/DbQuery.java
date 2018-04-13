@@ -11,7 +11,7 @@ public class DbQuery<T> implements IQuery<T> ,IDbQuery<T> {
 	public DbQuery(Connection conn, Class<?> type) {
 		Conn = conn;
 		TEntity = new Entity<T>(type);
-		trackSql = trackSql.replace("{table}", "["+type.getSimpleName()+"]");
+		trackSql = trackSql.replace("{table}", "["+TEntity.getTableName()+"]");
 	}
 
 	Entity<T> TEntity;

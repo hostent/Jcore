@@ -43,7 +43,7 @@ public final class RedisUtil {
             //config.setMaxWait(MAX_WAIT);
             config.setMaxWaitMillis(MAX_WAIT);            
             config.setTestOnBorrow(TEST_ON_BORROW);
-            jedisPool = new JedisPool(config, ADDR, PORT, TIMEOUT, AUTH);
+            jedisPool = new JedisPool(config, ADDR, PORT, TIMEOUT);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -65,9 +65,15 @@ public final class RedisUtil {
     }
     
  
-    public static void returnResource(final Jedis jedis) {
+    public synchronized  void returnResource( Jedis jedis) {
         if (jedis != null) {
-            jedisPool.getResource();//.returnResource(jedis);
+            jedisPool.close();
         }
     }
+    
+    public synchronized void returnBrokenResource(Jedis jedis) {  
+        if (jedis != null) {  
+        	jedisPool.close();
+        }  
+    }  
 }

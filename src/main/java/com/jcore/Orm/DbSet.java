@@ -44,7 +44,7 @@ public abstract class DbSet<T> implements ISet<T> ,IDbQuery<T>{
 
 		columns = TEntity.getColumns(isNeedId);
 
-		sql = sql.replace("{table}", TEntity.getType().getName());
+		sql = sql.replace("{table}", TEntity.getTableName());
 
 		sql = sql.replace("{columns}", "[" + String.join("],[", columns) + "]");
 
@@ -64,7 +64,7 @@ public abstract class DbSet<T> implements ISet<T> ,IDbQuery<T>{
 		
 		String sql = "delete from [{table}] where [{key}]=@key";
 
-		sql = sql.replace("{table}", TEntity.getType().getName());
+		sql = sql.replace("{table}", TEntity.getTableName());
 		sql = sql.replace("{key}", TEntity.getKey());
 
 		Object[] par = new Object[1];
@@ -79,7 +79,7 @@ public abstract class DbSet<T> implements ISet<T> ,IDbQuery<T>{
 	public int Update(T t) {
 		
 		String sql = "update [{table}] set {updateStr} where {key}=@{key}";
-		sql = sql.replace("{table}", TEntity.getType().getName());
+		sql = sql.replace("{table}", TEntity.getTableName());
 		
 		String[] cols = TEntity.getColumns(false);
 		String colStr ="";

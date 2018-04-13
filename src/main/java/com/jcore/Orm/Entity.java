@@ -67,13 +67,22 @@ public class Entity<T> {
 
 	public String[] getColumns(boolean isIncludeId) {
 		ArrayList<String> list = new ArrayList<String>();
+		
 		Field[] fields = this.getType().getDeclaredFields();
 
 		String key = getKey();
 
 		for (int i = 0; i < fields.length; i++) {
-			String colName = fields[i].getName();
-			if ((!isIncludeId) && colName == key) {
+			
+			Column colum = fields[i].getDeclaredAnnotation(Column.class);
+			
+			if(colum==null)
+			{
+				continue;
+			}
+			
+			String colName = colum.Name();
+			if ((!isIncludeId) && colName.equals(key)) {
 				continue;
 			}
 			list.add(colName);
@@ -104,7 +113,7 @@ public class Entity<T> {
 		
 		for (int i = 0; i < fields.length; i++) {
 			String colName = fields[i].getName();
-			if (colName == key) {
+			if (colName.equals(key)) {
 				
 				Method method =null;
 				Method[] mlist = this.getType().getDeclaredMethods();
@@ -153,8 +162,16 @@ public class Entity<T> {
 		String key = getKey();
 
 		for (int i = 0; i < fields.length; i++) {
+			
+			Column colum = fields[i].getDeclaredAnnotation(Column.class);
+			
+			if(colum==null)
+			{
+				continue;
+			}
+			
 			String colName = fields[i].getName();
-			if ((!isIncludeId) && colName == key) {
+			if ((!isIncludeId) && colName.equals(key)) {
 				continue;
 			}
 
@@ -196,4 +213,18 @@ public class Entity<T> {
 		return  list.toArray();
 	}
 
+	
+	public String getTableName()
+	{
+		Table table = this.getType().getAnnotation(Table.class);
+		
+		if(table==null)
+		{
+			return this.getType().getName();
+		}
+		
+		return table.Name();
+		
+	}
+	
 }
