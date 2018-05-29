@@ -8,8 +8,13 @@ import io.netty.channel.ChannelInboundHandlerAdapter;
 import io.netty.util.ReferenceCountUtil;
 
 public class SocketHandler extends ChannelInboundHandlerAdapter {
+	
+	
+	public ChannelHandlerContext channelHandlerContext=null;
+	
 
-    @Override
+
+	@Override
     public void channelRead(ChannelHandlerContext ctx, Object msg) { // (2)
 
 
@@ -52,6 +57,9 @@ public class SocketHandler extends ChannelInboundHandlerAdapter {
     @Override
     public void channelActive(ChannelHandlerContext ctx) throws Exception {
 
+    	
+    	//channelHandlerContext = ctx;
+    	
 //
 //    	final ByteBuf time = ctx.alloc().buffer(4); // (2)
 //        time.writeInt((int) (System.currentTimeMillis() / 1000L + 2208988800L));
@@ -103,6 +111,8 @@ public class SocketHandler extends ChannelInboundHandlerAdapter {
     	System.out.print("userEventTriggered");
     	super.userEventTriggered(ctx, evt);
     }
+    
+    
     
     
     
