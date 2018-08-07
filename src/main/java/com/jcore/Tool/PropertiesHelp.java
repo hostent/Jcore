@@ -76,4 +76,18 @@ public class PropertiesHelp {
 
 	}
 
+	public static String get(String propertiesName,String key)   
+	{
+		Properties pro = new Properties();	
+		try {
+			pro.load(PropertiesHelp.class.getClassLoader().getResourceAsStream( propertiesName+".properties"));
+		} catch (IOException e) {
+
+			return "";
+		}
+		
+		return pro.getProperty(key, "");
+	}
+	
+	
 }
