@@ -1,6 +1,6 @@
 package com.jcore.Mongodb;
 
-import java.time.LocalDateTime;
+import java.lang.management.ManagementFactory;
 import java.util.Date;
 
 import org.bson.Document;
@@ -38,6 +38,9 @@ public class MongodbLog implements Logger{
 				entity.setLevel(level);
 				entity.setLogTime(new Date());
 				entity.setMsg(msg);
+				
+				entity.setProjectInfo( System.getProperty("user.dir"));
+				entity.setPidInfo(ManagementFactory.getRuntimeMXBean().getName());
 				
 				MongoDatabase db = ConnectionManager.getDb("MongodbLog");
 				

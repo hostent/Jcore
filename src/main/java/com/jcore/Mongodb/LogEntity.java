@@ -1,5 +1,6 @@
 package com.jcore.Mongodb;
 
+
 import java.util.Date;
 
 import org.bson.Document;
@@ -7,6 +8,7 @@ import org.bson.Document;
 public class LogEntity implements IEntity  
 {	
 	Document doc  = new Document();
+	
 	
 	public String getLogType() {
 		return doc.getString("logType");
@@ -37,8 +39,23 @@ public class LogEntity implements IEntity
 		return doc.getString("level");
 	}
 	public void setLevel(String level) {
-		doc.put("level", level);
+		doc.put("level", level);				
 	}
+	
+	public String getProjectInfo() {
+		return doc.getString("projectInfo");
+	}
+	public void setProjectInfo(String projectInfo) {
+		doc.put("projectInfo",projectInfo);
+	}
+	public String getPidInfo() {
+		return doc.getString("pidInfo");
+	}
+	public void setPidInfo(String pidInfo) {
+		doc.put("pidInfo", pidInfo);
+	}
+
+	
  
 	@Override
 	public Document getDoc() {
@@ -47,7 +64,7 @@ public class LogEntity implements IEntity
 	}
 	@Override
 	public void fill(Document _doc) {
-		this.doc=_doc;
-		
+		this.doc=_doc;		
 	}
 }
+
