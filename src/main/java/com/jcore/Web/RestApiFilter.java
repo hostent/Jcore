@@ -19,6 +19,7 @@ import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.jcore.Frame.Log;
 import com.jcore.Frame.Request;
 import com.jcore.Frame.Response;
 
@@ -52,6 +53,9 @@ public class RestApiFilter implements Filter {
 			outPutResponse(response, apiResponse);
 			return;
 		}
+		
+		//log
+		Log.apiLog.info(json);
 
 		apiResponse.setId(apiReq.getId());
 
@@ -106,6 +110,9 @@ public class RestApiFilter implements Filter {
 			throws JsonProcessingException, IOException {
 		ObjectMapper objectMapper = new ObjectMapper();
 		String json = objectMapper.writeValueAsString(apiResponse);
+		
+		//log
+		Log.apiLog.info(json);
 
 		response.setContentType("application/json;charset=UTF-8");
 

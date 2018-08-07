@@ -27,16 +27,27 @@ public class MongodbLog implements Logger{
 	// 这里应该修改成异步记录
 	private void saveLog(String msg,String level)
 	{
-		LogEntity entity = new LogEntity();
-		entity.setLogType(_logName);
-		entity.setLevel(level);
-		entity.setLogTime(new Date());
-		entity.setMsg(msg);
 		
-		MongoDatabase db = ConnectionManager.getDb("MongodbLog");
+		new Runnable() {
+
+			@Override
+			public void run() {
+				
+				LogEntity entity = new LogEntity();
+				entity.setLogType(_logName);
+				entity.setLevel(level);
+				entity.setLogTime(new Date());
+				entity.setMsg(msg);
+				
+				MongoDatabase db = ConnectionManager.getDb("MongodbLog");
+				
+				MongoCollection<Document> col = db.getCollection("LogEntity", Document.class);
+				col.insertOne(entity.getDoc());
+			}
 		
-		MongoCollection<Document> col = db.getCollection("LogEntity", Document.class);
-		col.insertOne(entity.getDoc());
+		}.run();
+		
+		
 
 	}
 	
