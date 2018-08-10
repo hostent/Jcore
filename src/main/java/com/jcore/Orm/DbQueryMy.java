@@ -224,8 +224,14 @@ public class DbQueryMy<T> implements IQuery<T> ,IDbQuery<T>{
 		String columnStr = "";
 
 		Field[] fields = TEntity.getType().getDeclaredFields();
-
+	 
 		for (int i = 0; i < fields.length; i++) {
+			if(fields[i].getAnnotation(Column.class)==null)
+			{
+				continue;
+			}
+			 			
+			
 			String colName = fields[i].getName();
 
 			columnStr = columnStr + ",`" + colName + "`";

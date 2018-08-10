@@ -69,14 +69,14 @@ public class Entity<T> {
 		ArrayList<String> list = new ArrayList<String>();
 		
 		Field[] fields = this.getType().getDeclaredFields();
-
+ 
 		String key = getKey();
 
 		for (int i = 0; i < fields.length; i++) {
 			
 			Column colum = fields[i].getDeclaredAnnotation(Column.class);
 			
-			if(colum==null)
+			if( colum==null)
 			{
 				continue;
 			}
@@ -160,12 +160,14 @@ public class Entity<T> {
 		Field[] fields = this.getType().getDeclaredFields();
 
 		String key = getKey();
+		
+	 
 
 		for (int i = 0; i < fields.length; i++) {
 			
 			Column colum = fields[i].getDeclaredAnnotation(Column.class);
 			
-			if(colum==null)
+			if( colum==null)
 			{
 				continue;
 			}
@@ -216,7 +218,7 @@ public class Entity<T> {
 	
 	public String getTableName()
 	{
-		Table table = this.getType().getAnnotation(Table.class);
+		Table table = this.getType().getDeclaredAnnotation(Table.class);
 		
 		if(table==null)
 		{
@@ -226,5 +228,6 @@ public class Entity<T> {
 		return table.Name();
 		
 	}
+ 
 	
 }
