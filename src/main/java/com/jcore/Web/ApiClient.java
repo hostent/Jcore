@@ -19,34 +19,36 @@ import okhttp3.RequestBody;
 
 public class ApiClient {
 
-	String _url = "";
-	String _secret = "";
-	String _key = "";
+	ApiClientConfig _config;
 
 	public ApiClient(String key, String url, String secret) {
 
-		_url = url;
-		_key = key;
-		_secret = secret;
+		_config.set_key(key);
+		_config.set_secret(secret);
+		_config.set_url(url);
 	}
 	
 	public ApiClient(ApiClientConfig config)
 	{
-		_url = config.get_url();
-		_key = config.get_key();
-		_secret = config.get_secret();
+		_config = config;
 	}
 
 	private String getUrl(String json) {
-		_url = _url + "?key={key}&sign={sign}";
-
-		_url = _url.replace("{key}", _key);
-
-		String sign = Md5Help.toMD5(_key + _secret + json);
 		
-		_url = _url.replace("{sign}", sign);
+		String url=_config.get_url();
+		
+		if(_config.get_isSign())
+		{
+			url = url + "?key={key}&sign={sign}";
 
-		return _url;
+			url = url.replace("{key}", _config.get_key());
+
+			String sign = Md5Help.toMD5(_config.get_key() + _config.get_secret() + json);
+			
+			url = url.replace("{sign}", sign);
+		}
+	
+		return url;
 	}
 
 	public static final MediaType JSON_med = MediaType.parse("application/json;charset=utf-8");

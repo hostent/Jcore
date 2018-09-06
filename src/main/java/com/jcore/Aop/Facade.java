@@ -44,8 +44,11 @@ public class Facade implements InvocationHandler {
     	if(apiCall!=null)
     	{
     		//System.out.println("22222");
+    		
+    		ApiClientConfig config = new ApiClientConfig(apiCall.service());
+    		
         	
-        	ApiClient client =	new ApiClient(new ApiClientConfig(apiCall.service()));
+        	ApiClient client =	new ApiClient(config);
         	
         	
         	
