@@ -14,7 +14,7 @@ import com.mongodb.client.MongoDatabase;
 public class MongodbLog implements Logger{
 	
 	
-	
+	static Object lock = new Object();
 
 	
 	String _logName="";
@@ -23,6 +23,8 @@ public class MongodbLog implements Logger{
 	{
 		_logName = logName;
 	}
+	
+	static MongoDatabase db = null;
 	
 	// 这里应该修改成异步记录
 	private void saveLog(String msg,String level)
@@ -42,7 +44,15 @@ public class MongodbLog implements Logger{
 				entity.setProjectInfo( System.getProperty("user.dir"));
 				entity.setPidInfo(ManagementFactory.getRuntimeMXBean().getName());
 				
-				MongoDatabase db = ConnectionManager.getDb("MongodbLog");
+				if(db==null)
+				{
+					synchronized (lock) {
+						if(db==null)
+						{
+							db = ConnectionManager.getDb("MongodbLog");
+						}
+					}
+				}					
 				
 				MongoCollection<Document> col = db.getCollection("LogEntity", Document.class);
 				col.insertOne(entity.getDoc());
