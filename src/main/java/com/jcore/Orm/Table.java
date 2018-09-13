@@ -10,10 +10,15 @@ import java.lang.annotation.Target;
 @Target(ElementType.TYPE)
 @Documented
 public @interface Table {
+		
 	
+	String Name() default "";	
 	
+	String Key() default "";
 	
-	String Name() default "";
+	String UniqueKey() default "";
 	
+	Boolean IsIdentity = true;
+	 
 	
 }

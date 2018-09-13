@@ -2,95 +2,60 @@ package com.jcore.Orm;
 
 import java.lang.reflect.*;
 import java.util.*;
-
-import com.jcore.Frame.*;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class Entity<T> {
 	
 	public Entity(Class<?> type)
 	{
 		Type=type;
+		
+		init();
 	}
 	
 	Class<?> Type=null;
-
-	public String getKey() {
-
-		Field[] fields = this.getType().getDeclaredFields();
-
-		for (int i = 0; i < fields.length; i++) {
-			Field field = fields[i];
-			Key key = field.getAnnotation(Key.class);
-			if (key != null) {
-				return field.getName();
-			}
+	
+	public String tableName="";
+	public String key="";
+	public String uniqueKey="";
+	public Boolean isIdentity=true;
+	
+	public List<String> columns= new ArrayList<String>();
+	
+	public void init()
+	{
+		Table table=  this.getType().getAnnotation(Table.class);
+		
+		tableName=table.Name();
+		key = table.Key();
+		uniqueKey = table.UniqueKey();
+		
+		Identity identity=  this.getType().getAnnotation(Identity.class);
+		if(identity==null)
+		{
+			isIdentity =false;
 		}
+		
+		Method[] methods = this.getType().getDeclaredMethods();
 
-		return null;
-	}
-
-	public boolean hasIdentity() {
-
-		Field[] fields = this.getType().getDeclaredFields();
-
-		for (int i = 0; i < fields.length; i++) {
-			Field field = fields[i];
-			Identity identity = field.getAnnotation(Identity.class);
-			if (identity != null) {
-				return true;
+		for (int i = 0; i < methods.length; i++) {
+			Method method = methods[i];
+			
+			JsonProperty jp =method.getAnnotation(JsonProperty.class);
+			
+			if(jp!=null)
+			{
+				columns.add(jp.value());
 			}
+			 
 		}
-
-		return false;
-	}
-
-	public String getUniqueKey() {
-
-		Field[] fields = this.getType().getDeclaredFields();
-
-		for (int i = 0; i < fields.length; i++) {
-			Field field = fields[i];
-			Unique key = field.getAnnotation(Unique.class);
-			if (key != null) {
-				return field.getName();
-			}
-		}
-
-		return null;
 	}
 
 	public Class<?> getType() {		 
 
 		return Type;
 
-	}
-
-	public String[] getColumns(boolean isIncludeId) {
-		ArrayList<String> list = new ArrayList<String>();
-		
-		Field[] fields = this.getType().getDeclaredFields();
- 
-		String key = getKey();
-
-		for (int i = 0; i < fields.length; i++) {
-			
-			Column colum = fields[i].getDeclaredAnnotation(Column.class);
-			
-			if( colum==null)
-			{
-				continue;
-			}
-			
-			String colName = colum.Name();
-			if ((!isIncludeId) && colName.equals(key)) {
-				continue;
-			}
-			list.add(colName);
-		}
-		
-
-		return (String[]) list.toArray(new String[list.size()]);
-	}
+	} 
 	
 	public String[] getColumnSymbol(String[] columns) 
 	{
@@ -105,129 +70,44 @@ public class Entity<T> {
 	
 	public  String getIdValue(T t)
 	{
-		Field[] fields = this.getType().getDeclaredFields();
-
-		String key = getKey();
-		Object obj=null;
-		
-		
-		for (int i = 0; i < fields.length; i++) {
-			String colName = fields[i].getName();
-			if (colName.equals(key)) {
-				
-				Method method =null;
-				Method[] mlist = this.getType().getDeclaredMethods();
-				
-				for (int j = 0; j < mlist.length; j++) {
-					if(mlist[j].getName().toLowerCase().equals(("get" + colName).toLowerCase()))
-					{
-						method=mlist[j];
-						break;
-					}
-				}
-				if(method==null)
-				{
-					try {
-						throw new NoSuchMethodException();
-					} catch (NoSuchMethodException e) {
-						// TODO 自动生成的 catch 块
-						Log.logError(e);
-					}
-				}
-
-				try {
-					obj = method.invoke(t);
-				} catch (IllegalAccessException e) {
-					// TODO 自动生成的 catch 块
-					Log.logError(e);
-				} catch (IllegalArgumentException e) {
-					// TODO 自动生成的 catch 块
-					Log.logError(e);
-				} catch (InvocationTargetException e) {
-					// TODO 自动生成的 catch 块
-					Log.logError(e);
-				}
-			}
-		}
-		
-		return obj.toString();
-  
+		BaseTable bt = (BaseTable)t;
+		return bt.map.get(key).toString();
 		 
 	}
 	
 	public Object[] getColumnValues(boolean isIncludeId, T t) {
-		ArrayList<Object> list = new ArrayList<Object>();
-		Field[] fields = this.getType().getDeclaredFields();
-
-		String key = getKey();
 		
-	 
+		List<Object> list= new ArrayList<Object>();
+		
+		BaseTable bt = (BaseTable)t;
 
-		for (int i = 0; i < fields.length; i++) {
+		for (int i = 0; i < columns.size(); i++) {
 			
-			Column colum = fields[i].getDeclaredAnnotation(Column.class);
-			
-			if( colum==null)
-			{
-				continue;
-			}
-			
-			String colName = fields[i].getName();
+			String colName = columns.get(i);
+
 			if ((!isIncludeId) && colName.equals(key)) {
 				continue;
 			}
 
-			Object obj=null;
-			try {
-				
-				Method method =null;
-				Method[] mlist = this.getType().getDeclaredMethods();
-				
-				for (int j = 0; j < mlist.length; j++) {
-					if(mlist[j].getName().toLowerCase().equals(("get" + colName).toLowerCase()))
-					{
-						method=mlist[j];
-						break;
-					}
-				}
-				if(method==null)
-				{
-					throw new NoSuchMethodException();
-				}
-
-				obj = method.invoke(t);
-				
-			} catch (IllegalArgumentException e) {
-				Log.logError(e);
-			} catch (IllegalAccessException e) {
-				Log.logError(e);
-			} catch (InvocationTargetException e) {
-				Log.logError(e);
-			} catch (SecurityException e) {
-				Log.logError(e);
-			} catch (NoSuchMethodException e) {
-				Log.logError(e);
-			}
-
-			list.add(obj);
+			list.add(bt.map.get(colName));
 		}
 
 		return  list.toArray();
 	}
 
-	
-	public String getTableName()
+	public String[]  getColumns(boolean isIncludeId)
 	{
-		Table table = this.getType().getDeclaredAnnotation(Table.class);
+		List<String> temp = new ArrayList<String>();
 		
-		if(table==null)
-		{
-			return this.getType().getName();
+		for (String str : columns) {
+			if((!isIncludeId) && str.equals(key))
+			{
+				 continue;
+			}
+			temp.add(str);
 		}
 		
-		return table.Name();
-		
+		return temp.toArray(new String[temp.size()]);
 	}
- 
 	
 }

@@ -1,6 +1,5 @@
 package com.jcore.Orm;
 
-import java.lang.reflect.*;
 import java.sql.*;
 import java.util.*;
 
@@ -11,14 +10,14 @@ public class DbQueryMy<T> implements IQuery<T> ,IDbQuery<T>{
 	public DbQueryMy(String connKey, Class<?> type) {
 		ConnKey = connKey;
 		TEntity = new Entity<T>(type);
-		trackSql = trackSql.replace("{table}", "`"+type.getSimpleName()+"`");
+		trackSql = trackSql.replace("{table}", "`"+TEntity.tableName+"`");
 	}
 	
 	public DbQueryMy(String connKey, Class<?> type, String prefix) {
 		ConnKey = connKey;
 		TEntity = new Entity<T>(type);
 
-		trackSql = trackSql.replace("{table}", "`"+prefix+type.getSimpleName()+"`");
+		trackSql = trackSql.replace("{table}", "`"+prefix+TEntity.tableName+"`");
 		
 		
 	}
@@ -100,7 +99,16 @@ public class DbQueryMy<T> implements IQuery<T> ,IDbQuery<T>{
 
 		ResultSet rs = MsSqlHelp.getResultSet(conn, this.trackSql, sqlArgs.toArray());
 
-		T resultObj = RecordMap.toEntity(TEntity.getType(), rs);
+		T resultObj=null;
+		try {
+			
+			resultObj = RecordMap.toEntity(TEntity.getType(), rs);
+			
+		} catch (NoSuchMethodException | SecurityException | InstantiationException | IllegalAccessException
+				| SQLException e) {
+			// TODO 自动生成的 catch 块
+			e.printStackTrace();
+		}
 		
 		ConnetionManager.close(conn);
 
@@ -119,7 +127,14 @@ public class DbQueryMy<T> implements IQuery<T> ,IDbQuery<T>{
 		
 		ResultSet rs = MsSqlHelp.getResultSet(conn, this.trackSql, sqlArgs.toArray());
 
-		List<T> list = RecordMap.toList(TEntity.getType(), rs);
+		List<T> list=null;
+		try {
+			list = RecordMap.toList(TEntity.getType(), rs);
+		} catch (NoSuchMethodException | SecurityException | InstantiationException | IllegalAccessException
+				| SQLException e) {
+			// TODO 自动生成的 catch 块
+			e.printStackTrace();
+		}
 
 		ConnetionManager.close(conn);
 		
@@ -160,7 +175,7 @@ public class DbQueryMy<T> implements IQuery<T> ,IDbQuery<T>{
 	@Override
 	public T Get(Object id) {
 
-		String whereStr = String.format(" where %s=? ", TEntity.getKey());
+		String whereStr = String.format(" where %s=? ", TEntity.key);
 
 		limitForm = 0;
 		limitLength = 1;
@@ -177,7 +192,14 @@ public class DbQueryMy<T> implements IQuery<T> ,IDbQuery<T>{
 		
 		ResultSet rs = MsSqlHelp.getResultSet(conn, this.trackSql, sqlArgs.toArray());	
 		
-		T entity = RecordMap.toEntity(TEntity.getType(), rs);
+		T entity=null;
+		try {
+			entity = RecordMap.toEntity(TEntity.getType(), rs);
+		} catch (NoSuchMethodException | SecurityException | InstantiationException | IllegalAccessException
+				| SQLException e) {
+			// TODO 自动生成的 catch 块
+			e.printStackTrace();
+		}
 
 		ConnetionManager.close(conn);
 		
@@ -187,7 +209,7 @@ public class DbQueryMy<T> implements IQuery<T> ,IDbQuery<T>{
 	@Override
 	public T GetUnique(Object unique) {
 
-		String whereStr = String.format(" where %s=? ", TEntity.getUniqueKey());
+		String whereStr = String.format(" where %s=? ", TEntity.uniqueKey);
 
 		limitForm = 0;
 		limitLength = 1;
@@ -204,7 +226,14 @@ public class DbQueryMy<T> implements IQuery<T> ,IDbQuery<T>{
 		
 		ResultSet rs = MsSqlHelp.getResultSet(conn, this.trackSql, sqlArgs.toArray());		
 
-		T entity = RecordMap.toEntity(TEntity.getType(), rs);
+		T entity=null;
+		try {
+			entity = RecordMap.toEntity(TEntity.getType(), rs);
+		} catch (NoSuchMethodException | SecurityException | InstantiationException | IllegalAccessException
+				| SQLException e) {
+			// TODO 自动生成的 catch 块
+			e.printStackTrace();
+		}
 		
 		ConnetionManager.close(conn);
 
@@ -222,17 +251,10 @@ public class DbQueryMy<T> implements IQuery<T> ,IDbQuery<T>{
 		}
 
 		String columnStr = "";
-
-		Field[] fields = TEntity.getType().getDeclaredFields();
 	 
-		for (int i = 0; i < fields.length; i++) {
-			if(fields[i].getAnnotation(Column.class)==null)
-			{
-				continue;
-			}
-			 			
-			
-			String colName = fields[i].getName();
+		for (int i = 0; i < TEntity.columns.size(); i++) {
+					
+			String colName = TEntity.columns.get(i);
 
 			columnStr = columnStr + ",`" + colName + "`";
 		}

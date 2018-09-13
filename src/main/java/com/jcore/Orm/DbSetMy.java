@@ -52,7 +52,7 @@ public abstract class DbSetMy<T> implements ISet<T>,IDbQuery<T> {
 
 		boolean isNeedId = false;
 
-		if (TEntity.hasIdentity()) {
+		if (TEntity.isIdentity) {
 			// sql = sql + " select @@IDENTITY; ";
 			isNeedId = false;
 		} else {
@@ -87,7 +87,7 @@ public abstract class DbSetMy<T> implements ISet<T>,IDbQuery<T> {
 		String sql = "delete from `{table}` where `{key}`=?";
 
 		sql = sql.replace("{table}", Prefix + TEntity.getType().getSimpleName());
-		sql = sql.replace("{key}", TEntity.getKey());
+		sql = sql.replace("{key}", TEntity.key);
 
 		Object[] par = new Object[1];
 		par[0] = id;
@@ -114,7 +114,7 @@ public abstract class DbSetMy<T> implements ISet<T>,IDbQuery<T> {
 		}
 		colStr = colStr.substring(1, colStr.length());
 		sql = sql.replace("{updateStr}", colStr);
-		sql = sql.replace("{key}", TEntity.getKey());
+		sql = sql.replace("{key}", TEntity.key);
 
 		sql = sql.replace("{id}", TEntity.getIdValue(t));
 
