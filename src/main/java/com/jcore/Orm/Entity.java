@@ -43,7 +43,7 @@ public class Entity<T> {
 			
 			JsonProperty jp =method.getAnnotation(JsonProperty.class);
 			
-			if(jp!=null)
+			if(jp!=null && (!columns.contains(jp.value())))
 			{
 				columns.add(jp.value());
 			}
@@ -70,7 +70,7 @@ public class Entity<T> {
 	
 	public  String getIdValue(T t)
 	{
-		BaseTable bt = (BaseTable)t;
+		ViewStore bt = (ViewStore)t;
 		return bt.map.get(key).toString();
 		 
 	}
@@ -79,7 +79,7 @@ public class Entity<T> {
 		
 		List<Object> list= new ArrayList<Object>();
 		
-		BaseTable bt = (BaseTable)t;
+		ViewStore bt = (ViewStore)t;
 
 		for (int i = 0; i < columns.size(); i++) {
 			

@@ -2,6 +2,7 @@ package com.jcore.Tool;
 
 import java.lang.reflect.Type;
 import java.math.BigDecimal;
+import java.sql.Timestamp;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
@@ -45,7 +46,9 @@ public class DataConverter{
 		}
 		else if(paramType==LocalDateTime.class)
 		{
-			t= LocalDateTime.parse(dataSource.toString());
+			t= ((Timestamp)dataSource).toLocalDateTime();
+			
+			//LocalDateTime.parse(dataSource.toString());
 		}
 		else if(paramType==LocalDate.class)
 		{

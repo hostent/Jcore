@@ -27,14 +27,14 @@ public class RecordMap {
 				{
 					continue;
 				}
-				Type paramType = method.getGenericParameterTypes()[0];
+				Type paramType = method.getGenericReturnType();
 				Object value = DataConverter.parse(paramType, rs.getObject(key));
 				map.put(key, value);
 			}			 
 
 			T t = (T) clazz.newInstance();
 
-			((BaseTable) t).fill(map);
+			((ViewStore) t).fill(map);
 
 			list.add(t);
 		}
@@ -51,6 +51,11 @@ public class RecordMap {
 		Map<String, Object> map = new HashMap<String, Object>();
 		ResultSetMetaData rsmd = rs.getMetaData();
 		int count = rsmd.getColumnCount();
+		
+		if(!rs.next())
+		{
+			return null;
+		}
 
 		for (int i = 1; i <= count; i++) {
 			String key = rsmd.getColumnLabel(i);
@@ -59,7 +64,7 @@ public class RecordMap {
 			{
 				continue;
 			}
-			Type paramType = method.getGenericParameterTypes()[0];
+			Type paramType = method.getGenericReturnType();
 			Object value = DataConverter.parse(paramType, rs.getObject(key));
 			map.put(key, value);
 		}
@@ -71,7 +76,7 @@ public class RecordMap {
 		@SuppressWarnings("unchecked")
 		T t = (T) clazz.newInstance();
 
-		((BaseTable) t).fill(map);
+		((ViewStore) t).fill(map);
 
 		return t;
 	}
