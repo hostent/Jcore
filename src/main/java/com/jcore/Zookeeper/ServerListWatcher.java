@@ -19,48 +19,6 @@ import com.jcore.Tool.PropertiesHelp;
 
 public class ServerListWatcher {
 
-	public class ServerNode {
-		private String id;
-
-		private String name;
-
-		private String address;
-
-		private String port;
-
-		public String getId() {
-			return id;
-		}
-
-		public void setId(String id) {
-			this.id = id;
-		}
-
-		public String getName() {
-			return name;
-		}
-
-		public void setName(String name) {
-			this.name = name;
-		}
-
-		public String getAddress() {
-			return address;
-		}
-
-		public void setAddress(String address) {
-			this.address = address;
-		}
-
-		public String getPort() {
-			return port;
-		}
-
-		public void setPort(String port) {
-			this.port = port;
-		}
-
-	}
 
 	static Lock _store_Lock = new ReentrantLock();
 
@@ -79,12 +37,21 @@ public class ServerListWatcher {
 			fillStore(serverKey, root);
 
 		}
-		
+		// 负载均衡算法 // 随机
 		Random rand = new Random();
 		
 		int index =  rand.nextInt(store.get(serverKey).size());
+		
+		int i=0;
+		for (ServerNode v : store.get(serverKey).values()) {
+            if(i==index)
+            {
+            	return v;
+            }            
+            i++;
+        }
 
-		return store.get(serverKey).get(index); // 负载均衡算法 // 随机
+		return null; 
 
 	}
 

@@ -7,9 +7,10 @@ import java.util.Hashtable;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
-import com.jcore.Frame.ApiCall;
+import com.jcore.Frame.ClientCall;
 import com.jcore.Web.ApiClient;
-import com.jcore.Web.ApiClientConfig;
+import com.jcore.Web.ClientConfig;
+import com.jcore.Web.CloudClient;
 
  
 
@@ -34,25 +35,20 @@ public class Facade implements InvocationHandler {
     public Object invoke(Object proxy, Method method, Object[] args)    
             throws Throwable { 
     	
-    	ApiCall apiCall = method.getAnnotation(ApiCall.class);   
-    	if(apiCall==null && objImp !=null)
+    	ClientCall clientCall = method.getAnnotation(ClientCall.class);   
+    	if(clientCall==null && objImp !=null)
     	{
-    		//System.out.println("11111");
     		return method.invoke(objImp, args);
     	}
     	
-    	if(apiCall!=null)
+    	if(clientCall!=null)
     	{
-    		//System.out.println("22222");
     		
-    		ApiClientConfig config = new ApiClientConfig(apiCall.service());
-    		
+    		ClientConfig config = new ClientConfig(clientCall.service());    		
         	
-        	ApiClient client =	new ApiClient(config);
-        	
-        	
-        	
-        	return client.post(method.getGenericReturnType(), apiCall.method(), args);    
+        	CloudClient client = new CloudClient(config);       	
+        	        	
+        	return client.post(method.getGenericReturnType(), clientCall.method(), args);    
     	}
     	
     	return null;

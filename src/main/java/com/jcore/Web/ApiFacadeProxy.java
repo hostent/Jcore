@@ -7,7 +7,7 @@ import java.util.Hashtable;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
-import com.jcore.Frame.ApiCall;
+import com.jcore.Frame.ClientCall;
  
 /** 
  *  JDK动态代理代理类  

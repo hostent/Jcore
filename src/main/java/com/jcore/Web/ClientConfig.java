@@ -6,11 +6,12 @@ import org.apache.zookeeper.KeeperException;
 
 import com.jcore.Tool.PropertiesHelp;
 import com.jcore.Zookeeper.ServerListWatcher;
-import com.jcore.Zookeeper.ServerListWatcher.ServerNode;
+import com.jcore.Zookeeper.ServerNode;
+ 
 
-public class ApiClientConfig {
+public class ClientConfig {
 
-	public ApiClientConfig(String targetSystem) {
+	public ClientConfig(String targetSystem) {
 		try {
 			
 			if(hasUrl(targetSystem))

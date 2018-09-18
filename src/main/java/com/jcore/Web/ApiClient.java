@@ -19,7 +19,7 @@ import okhttp3.RequestBody;
 
 public class ApiClient {
 
-	ApiClientConfig _config;
+	ClientConfig _config;
 
 	public ApiClient(String key, String url, String secret) {
 
@@ -28,7 +28,7 @@ public class ApiClient {
 		_config.set_url(url);
 	}
 	
-	public ApiClient(ApiClientConfig config)
+	public ApiClient(ClientConfig config)
 	{
 		_config = config;
 	}
