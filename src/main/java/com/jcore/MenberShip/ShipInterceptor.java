@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.resource.ResourceHttpRequestHandler;
 
 public class ShipInterceptor implements HandlerInterceptor {
 		
@@ -20,6 +21,13 @@ public class ShipInterceptor implements HandlerInterceptor {
 			throws Exception {
 		// TODO 自动生成的方法存根
 		
+		//ResourceHttpRequestHandler
+		
+		if(handler instanceof ResourceHttpRequestHandler)
+		{
+			return true;
+		}
+		
 		Method method = ((HandlerMethod)handler).getMethod();
 		
 		Right right=method.getAnnotation(Right.class);
@@ -30,6 +38,8 @@ public class ShipInterceptor implements HandlerInterceptor {
 				return false;
 			}
 		}		
+		
+		
 		
 		
 		ss="fdsafsad";
