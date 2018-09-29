@@ -28,7 +28,7 @@ public class ServerListWatcher {
 
 	public static ServerNode watch(String serverKey) throws Exception {
 
-		if (!store.containsValue(serverKey)) {
+		if (!store.containsKey(serverKey)) {
 			String connectstring = PropertiesHelp.getApplicationConf("spring.cloud.zookeeper.connect-string");
 
 			bzk.connectZookeeper(connectstring);

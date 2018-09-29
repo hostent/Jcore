@@ -95,7 +95,7 @@ public class CloudApiFilter implements Filter {
 		String json = objectMapper.writeValueAsString(apiResponse);
 		
 		//log
-		Log.apiLog.info(json);
+		//Log.apiLog.info(json);
 
 		response.setContentType("application/json;charset=UTF-8");
 
